@@ -1,91 +1,71 @@
-import Image from 'next/image'
-import { Inter } from 'next/font/google'
-import styles from './page.module.css'
+"use client";
 
-const inter = Inter({ subsets: ['latin'] })
+import { useState } from "react";
+import Image from "next/image";
+import { Inter } from "next/font/google";
+import TextInput from "./components/TextInput";
+import TextOutput from "./components/TextOutput";
+
+const inter = Inter({ subsets: ["latin"] });
 
 export default function Home() {
+  const [keywords, setKeywords] = useState([]);
+  const [isOpen, setIsOpen] = useState(false);
+  const [loading, setLoading] = useState(false);
+
+  const extractKeywords = async (text) => {
+    "use server";
+    console.log(text);
+
+    const options = {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${process.env.NEXT_PUBLIC_OPENAI_API_KEY}`,
+      },
+      body: JSON.stringify({
+        model: "text-davinci-003",
+        prompt:
+          "Extract keywords from the following text. Make the first letter of each word uppercase and separate with commas\n\n" +
+          text +
+          "\n\n",
+        temperature: 0.5,
+        max_tokens: 60,
+        frequency_penalty: 0.8,
+      }),
+    };
+
+    const response = await fetch(
+      "https://api.openai.com/v1/completions",
+      options
+    );
+
+    const json = await response.json();
+    const data = json.choices[0].text.trim();
+
+    console.log(data);
+    setKeywords(data);
+    setLoading(false);
+  };
+
   return (
-    <main className={styles.main}>
-      <div className={styles.description}>
-        <p>
-          Get started by editing&nbsp;
-          <code className={styles.code}>src/app/page.js</code>
-        </p>
+    <div className="mt-24 p-10 max-w-6xl mx-auto flex flex-col md:flex-row">
+      <div className="">
+        <h1 className="text-4xl font-bold">AI Keyword Extractor</h1>
         <div>
-          <a
-            href="https://vercel.com?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            By{' '}
-            <Image
-              src="/vercel.svg"
-              alt="Vercel Logo"
-              className={styles.vercelLogo}
-              width={100}
-              height={24}
-              priority
-            />
-          </a>
+          <h2>Paste your text below and we will extract keywords for you.</h2>
+          <div className="flex md:w-[600px] items-start space-x-12">
+            <div className="w-[320px] md:w-[450px]">
+              <TextInput extractKeywords={extractKeywords} />
+            </div>
+          </div>
         </div>
       </div>
-
-      <div className={styles.center}>
-        <Image
-          className={styles.logo}
-          src="/next.svg"
-          alt="Next.js Logo"
-          width={180}
-          height={37}
-          priority
-        />
-        <div className={styles.thirteen}>
-          <Image src="/thirteen.svg" alt="13" width={40} height={31} priority />
+      <div className="flex w-full items-start space-x-12">
+        <div className="mt-4">
+          <TextOutput keywords={keywords} />
         </div>
       </div>
-
-      <div className={styles.grid}>
-        <a
-          href="https://beta.nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={inter.className}>
-            Docs <span>-&gt;</span>
-          </h2>
-          <p className={inter.className}>
-            Find in-depth information about Next.js features and API.
-          </p>
-        </a>
-
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={inter.className}>
-            Templates <span>-&gt;</span>
-          </h2>
-          <p className={inter.className}>Explore the Next.js 13 playground.</p>
-        </a>
-
-        <a
-          href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={inter.className}>
-            Deploy <span>-&gt;</span>
-          </h2>
-          <p className={inter.className}>
-            Instantly deploy your Next.js site to a shareable URL with Vercel.
-          </p>
-        </a>
-      </div>
-    </main>
-  )
+    </div>
+  );
 }
