@@ -2,11 +2,12 @@ import React from "react";
 
 const Header = () => {
   return (
-    <header className="top-0 sticky w-full h-14 p-4 text-white flex justify-start items-center bg-black font-bold text-2xl z-10">
-      <div>
-        <h1>AI <span className="text-rose-500">Keyword extractor</span></h1>
+    <nav className="navbar bg-base-100">
+      <div className="flex justify-between items-center">
+        <a className="btn btn-ghost normal-case text-xl">Keyword Extractor</a>
+        <p className="font-thin">Developed with OpenAI API</p>
       </div>
-    </header>
+    </nav>
   );
 };
 

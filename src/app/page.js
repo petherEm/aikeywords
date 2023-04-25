@@ -51,9 +51,14 @@ export default function Home() {
   return (
     <div className="mt-24 p-10 max-w-6xl mx-auto flex flex-col md:flex-row">
       <div className="">
-        <h1 className="text-4xl font-bold">AI Keyword Extractor</h1>
-        <div>
-          <h2>Paste your text below and we will extract keywords for you.</h2>
+        <div className="flex flex-col items-start">
+          <div className="mockup-code w-fit md:w-[380px]">
+            <pre className="flex flex-col p-4">
+              <code>Paste your text below</code>
+              <code>We will extract keywords for you</code>
+            </pre>
+          </div>
+
           <div className="flex md:w-[600px] items-start space-x-12">
             <div className="w-[320px] md:w-[450px]">
               <TextInput extractKeywords={extractKeywords} />
