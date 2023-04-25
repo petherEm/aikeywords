@@ -33,10 +33,10 @@ const TextOutput = ({ keywords }) => {
 
       <div className="mockup-code max-w-[350px] md:min-w-[400px] text-[13px]">
         <pre data-prefix="$">
-          <code>model: "text-davinci-003"</code>
+          <code>model: text-davinci-003</code>
         </pre>
         <pre data-prefix=">" className="text-warning">
-          <code>prompt: "Extract keywords from ..."</code>
+          <code>prompt: Extract keywords from ...</code>
         </pre>
         <pre data-prefix=">" className="text-success">
           <code>temperature: 0.5</code>
@@ -51,7 +51,7 @@ const TextOutput = ({ keywords }) => {
           <code>fetching from: </code>
         </pre>
         <pre data-prefix="$">
-          <code>"https://api.openai.com/v1/completions"</code>
+          <code>https://api.openai.com/v1/completions</code>
         </pre>
       </div>
     </div>
